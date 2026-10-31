@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#69c9ed">
+  <title>Sắp hè 2027</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      min-height: 100vh;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: #124766;
+      overflow-x: hidden;
+      background: #75d0ef;
+    }
+    .scene {
+      min-height: 100vh;
+      position: relative;
+      isolation: isolate;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 42px 18px 80px;
+      background:
+        linear-gradient(180deg, rgba(129,220,246,.08) 0%, rgba(255,255,255,.12) 43%, rgba(255,255,255,.02) 100%),
+        linear-gradient(180deg, #72d2f2 0%, #b8edfa 48%, #f8dfad 49%, #f5d394 100%);
+    }
+    /* Mặt trời và mây */
+    .sun {
+      position: absolute; z-index: -1; top: 8%; right: 12%;
+      width: clamp(65px, 9vw, 112px); aspect-ratio: 1; border-radius: 50%;
+      background: #fff2b8; box-shadow: 0 0 55px rgba(255,245,190,.7);
+    }
+    .cloud { position:absolute; z-index:-1; width:150px; height:38px; border-radius:40px;
+      background:rgba(255,255,255,.75); filter:drop-shadow(0 5px 5px rgba(54,155,190,.08)); }
+    .cloud:before,.cloud:after { content:""; position:absolute; background:inherit; border-radius:50%; }
+    .cloud:before { width:58px;height:58px;left:22px;bottom:8px; }
+    .cloud:after { width:74px;height:74px;right:22px;bottom:2px; }
+    .cloud.one { top:16%; left:8%; transform:scale(.8); }
+    .cloud.two { top:27%; right:9%; transform:scale(.58); opacity:.8; }
+    .sea-line {
+      position:absolute; z-index:-1; left:-5%; right:-5%; top:47%;
+      height:80px; border-radius:50%;
+      background:rgba(255,255,255,.24); transform:rotate(-2deg);
+    }
+    .foam {
+      position:absolute; z-index:-1; left:-8%; right:-8%; top:51%;
+      height:48px; border-top:8px solid rgba(255,255,255,.68);
+      border-radius:50%; transform:rotate(1deg);
+    }
+    .sand {
+      position:absolute; z-index:-1; inset:54% 0 0;
+      background:
+        radial-gradient(ellipse at 20% 35%, rgba(255,255,255,.35) 0 2px, transparent 3px),
+        radial-gradient(ellipse at 76% 65%, rgba(190,139,72,.15) 0 2px, transparent 3px),
+        linear-gradient(180deg,#f8dfa9,#edc77f);
+      background-size: 90px 70px, 110px 90px, auto;
+    }
+    .content { width:min(920px,100%); text-align:center; position:relative; }
+    .eyebrow {
+      display:inline-block; padding:9px 17px; margin-bottom:15px;
+      border:1px solid rgba(255,255,255,.75); border-radius:999px;
+      color:#176184; background:rgba(255,255,255,.48);
+      font-size:clamp(12px,1.8vw,15px); font-weight:700; letter-spacing:2px;
+      backdrop-filter:blur(8px);
+    }
+    h1 {
+      margin:0; color:#fff; font-size:clamp(42px,8.5vw,88px);
+      line-height:1.04; font-weight:800; letter-spacing:1px;
+      text-shadow:0 4px 0 rgba(25,120,160,.12), 0 8px 24px rgba(24,104,145,.18);
+    }
+    .credit {
+      margin:17px auto 32px; color:#155777; font-weight:700;
+      font-size:clamp(14px,2.5vw,21px); letter-spacing:.25px;
+      text-shadow:0 1px 0 rgba(255,255,255,.55);
+    }
+    .count-card {
+      width:min(760px,100%); margin:0 auto; padding:clamp(22px,4vw,38px);
+      border:1px solid rgba(255,255,255,.9); border-radius:30px;
+      background:rgba(255,255,255,.72);
+      box-shadow:0 22px 55px rgba(35,116,151,.18), inset 0 1px 0 #fff;
+      backdrop-filter:blur(12px);
+    }
+    .card-title { margin:0 0 8px; font-size:clamp(19px,3vw,25px); font-weight:800; color:#176487; }
+    .sub-title { margin:0 0 25px; color:#52849a; font-size:14px; }
+    .timer-wrap {
+      display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:clamp(8px,2vw,16px);
+      padding:clamp(10px,2vw,17px); border-radius:23px;
+      background:rgba(221,246,255,.85); border:1px solid rgba(116,198,225,.55);
+    }
+    .time-box {
+      min-width:0; padding:clamp(13px,2.7vw,23px) 5px;
+      background:linear-gradient(180deg,#fff,#f5fcff); border:1px solid #e0f4fb;
+      border-radius:18px; box-shadow:0 5px 14px rgba(53,137,169,.08);
+    }
+    .number { display:block; color:#1684b5; font-size:clamp(30px,6.5vw,58px); font-weight:800; line-height:1.05; font-variant-numeric:tabular-nums; }
+    .unit { display:block; margin-top:8px; color:#6795a8; font-size:clamp(11px,1.8vw,14px); font-weight:700; letter-spacing:1px; text-transform:uppercase; }
+    .date-pill {
+      display:inline-flex; align-items:center; gap:9px; margin-top:22px;
+      padding:11px 18px; border-radius:999px; color:#236783;
+      background:rgba(255,255,255,.8); font-size:14px; font-weight:700;
+    }
+    .message { min-height:22px; margin:17px 0 0; color:#28738f; font-weight:700; }
+    .floatie {
+      position:absolute; z-index:1; font-size:clamp(42px,6vw,68px);
+      filter:drop-shadow(0 9px 7px rgba(63,112,128,.2));
+      animation:bob 3.4s ease-in-out infinite;
+      user-select:none;
+    }
+    .floatie.left { left:clamp(5px,5vw,70px); bottom:12%; transform:rotate(-15deg); }
+    .floatie.right { right:clamp(5px,6vw,85px); bottom:18%; animation-delay:1s; transform:rotate(12deg); }
+    .beach-ball { position:absolute; z-index:1; left:17%; top:59%; font-size:clamp(28px,4vw,44px); animation:bob 4s ease-in-out infinite; }
+    @keyframes bob { 0%,100%{translate:0 0} 50%{translate:0 -12px} }
+    .footer { margin-top:24px; color:#38768d; font-size:12px; font-weight:600; }
+    @media (max-width:600px) {
+      .scene { padding:34px 14px 70px; align-items:flex-start; }
+      .content { margin-top:8vh; }
+      .credit { margin:13px auto 25px; line-height:1.5; }
+      .count-card { border-radius:24px; padding:22px 14px; }
+      .timer-wrap { gap:7px; padding:8px; border-radius:18px; }
+      .time-box { border-radius:13px; padding:15px 2px; }
+      .unit { letter-spacing:.4px; }
+      .floatie.left { bottom:5%; left:4%; }
+      .floatie.right { bottom:7%; right:4%; }
+      .beach-ball { left:8%; top:60%; }
+      .sun { top:5%; right:7%; }
+    }
+    @media (max-width:360px) {
+      .timer-wrap { gap:5px; padding:6px; }
+      .number { font-size:27px; }
+      .unit { font-size:10px; }
+    }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none !important; } }
+  </style>
+</head>
+<body>
+  <main class="scene">
+    <div class="sun"></div>
+    <div class="cloud one"></div><div class="cloud two"></div>
+    <div class="sea-line"></div><div class="foam"></div><div class="sand"></div>
+    <div class="floatie left" aria-hidden="true">🛟</div>
+    <div class="floatie right" aria-hidden="true">🛟</div>
+    <div class="beach-ball" aria-hidden="true">🏖️</div>
+
+    <section class="content">
+      <div class="eyebrow">KỲ NGHỈ ĐANG ĐẾN GẦN</div>
+      <h1>SẮP HÈ 2027</h1>
+      <p class="credit">WEBSITE ĐƯỢC LÀM BỞI PHAN NGỌC QUÂN LỚP 9/6 CHU VĂN AN</p>
+
+      <div class="count-card">
+        <h2 class="card-title">Đếm ngược đến ngày nghỉ hè!</h2>
+        <p class="sub-title">Sẵn sàng cho những ngày nắng, biển xanh và vui chơi hết mình nhé!</p>
+        <div class="timer-wrap" aria-label="Thời gian còn lại">
+          <div class="time-box"><span class="number" id="days">000</span><span class="unit">Ngày</span></div>
+          <div class="time-box"><span class="number" id="hours">00</span><span class="unit">Giờ</span></div>
+          <div class="time-box"><span class="number" id="minutes">00</span><span class="unit">Phút</span></div>
+          <div class="time-box"><span class="number" id="seconds">00</span><span class="unit">Giây</span></div>
+        </div>
+        <div class="date-pill">📅 MỤC TIÊU: 03/06/2027</div>
+        <p class="message" id="message" aria-live="polite"></p>
+      </div>
+      <div class="footer">☀️ Chúc bạn có một mùa hè 2027 thật đáng nhớ! ☀️</div>
+    </section>
+  </main>
+
+  <script>
+    // Đếm ngược đến 00:00 ngày 03/06/2027 theo giờ trên thiết bị.
+    const target = new Date(2027, 5, 3, 0, 0, 0).getTime();
+    const $ = (id) => document.getElementById(id);
+    function updateCountdown() {
+      const remaining = target - Date.now();
+      if (remaining <= 0) {
+        $("days").textContent = "000";
+        $("hours").textContent = "00";
+        $("minutes").textContent = "00";
+        $("seconds").textContent = "00";
+        $("message").textContent = "HÈ 2027 ĐÃ ĐẾN RỒI! 🎉";
+        return;
+      }
+      const day = Math.floor(remaining / 86400000);
+      const hour = Math.floor((remaining % 86400000) / 3600000);
+      const minute = Math.floor((remaining % 3600000) / 60000);
+      const second = Math.floor((remaining % 60000) / 1000);
+      $("days").textContent = String(day).padStart(3, "0");
+      $("hours").textContent = String(hour).padStart(2, "0");
+      $("minutes").textContent = String(minute).padStart(2, "0");
+      $("seconds").textContent = String(second).padStart(2, "0");
+      $("message").textContent = "Cố lên, kỳ nghỉ hè đang đến gần! 🌊";
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>
